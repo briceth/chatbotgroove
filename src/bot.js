@@ -13,8 +13,8 @@
 
 const recastai = require('recastai').default
 
-import { replyMessage } from './messages'
-
+//import { replyMessage } from './messages'
+const replyMessage = require('./messages').replyMessage
 // Instantiate Recast.AI SDK
 const client = new recastai(process.env.REQUEST_TOKEN)
 
@@ -25,9 +25,9 @@ const client = new recastai(process.env.REQUEST_TOKEN)
  * - response: Response of your server (can be a blank object if not needed: {})
  * - callback: Callback is a function called by Recast.AI hosting system when your code will be hosted
  */
-export const bot = (body, response, callback) => {
-  if (body.message) {
-    /*
+const bot = (body, response, callback) => {
+	if (body.message) {
+		/*
     * Call the Recast.AI SDK function to handle message from Bot Connector
     * This function will:
     * - Return a response with the status code 200
@@ -37,42 +37,47 @@ export const bot = (body, response, callback) => {
     * If you want to edit the behaviour of your code bot, depending on user input,
     * go to /src/message.js file and write your own code under "YOUR OWN CODE" comment.
     */
-    client.connect.handleMessage({ body }, response, replyMessage)
+		client.connect.handleMessage({ body }, response, replyMessage)
 
-    /*
+		/*
      * This function is called by Recast.AI hosting system when your code will be hosted
      */
-    callback(null, { result: 'Bot answered :)' })
-  } else if (body.text) {
-    /*
+		callback(null, { result: 'Bot answered :)' })
+	} else if (body.text) {
+		/*
     * If your request comes from the testing route
     * ie curl -X "POST" "https://localhost:5000" -d '{"text": "YOUR_TEXT"}' -H "Content-Type: application/json; charset=utf-8"
     * It just sends it to Recast.AI and returns replies
     */
-    client.request.converseText(body.text, { conversationToken: process.env.CONVERSATION_TOKEN || null })
-      .then((res) => {
-        if (res.reply()) {
-          /*
+		client.request
+			.converseText(body.text, {
+				conversationToken: process.env.CONVERSATION_TOKEN || null
+			})
+			.then(res => {
+				if (res.reply()) {
+					/*
            * If response received from Recast.AI contains a reply
            */
-          callback(null, {
-            reply: res.reply(),
-            conversationToken: res.conversationToken,
-          })
-        } else {
-          /*
+					callback(null, {
+						reply: res.reply(),
+						conversationToken: res.conversationToken
+					})
+				} else {
+					/*
            * If response received from Recast.AI does not contain any reply
            */
-          callback(null, {
-            reply: 'No reply :(',
-            conversationToken: res.conversationToken,
-          })
-        }
-      })
-      .catch((err) => {
-        callback(err)
-      })
-  } else {
-    callback('No text provided')
-  }
+					callback(null, {
+						reply: 'No reply :(',
+						conversationToken: res.conversationToken
+					})
+				}
+			})
+			.catch(err => {
+				callback(err)
+			})
+	} else {
+		callback('No text provided')
+	}
 }
+
+module.exports = bot

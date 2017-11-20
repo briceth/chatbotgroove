@@ -4,7 +4,7 @@ const actions = {
 	'show-languages': require('./show-languages')
 }
 
-export default async function handleAction(res, payload) {
+async function handleAction(res, payload) {
 	const currentAction = res.action && res.action.slug
 	console.log(currentAction)
 	let replies = []
@@ -24,3 +24,5 @@ export default async function handleAction(res, payload) {
 	}
 	return replies
 }
+
+module.exports = handleAction
