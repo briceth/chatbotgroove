@@ -13,7 +13,6 @@
 
 const recastai = require('recastai').default
 
-//import { replyMessage } from './messages'
 const replyMessage = require('./messages').replyMessage
 // Instantiate Recast.AI SDK
 const client = new recastai(process.env.REQUEST_TOKEN)

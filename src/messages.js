@@ -1,6 +1,4 @@
 /* module improts */
-//import handleAction from './actions'
-//import { request } from 'recastai'
 const handleAction = require('./actions').handleAction
 const request = require('recastai').request
 
