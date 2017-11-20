@@ -16,7 +16,7 @@ const bodyParser = require('body-parser')
 
 // Load configuration
 require('./config')
-const bot = require('./bot').bot
+const bot = require('./bot')
 
 // Start Express server
 const app = express()
